@@ -1,0 +1,118 @@
+# What Happens When You Type a URL in the Browser?
+(https://www.example.com/index.html
+)
+
+🧭 1. URL Parsing & Protocol Identification 
+“I need to use HTTPS to talk to www.example.com
+ and request /index.html.”
+
+
+🌍 2. DNS Lookup (Domain → IP) : The browser needs the server’s actual address (an IP, like 93.184.216.34).
+(DNS returns the IP address of the web server hosting the site.)
+
+
+🔒 3. TCP Handshake (Connection Setup)
+browser now connects to the IP via TCP (Transmission Control Protocol):
+
+- SYN → Browser says “I want to talk.”
+- SYN-ACK → Server says “I’m listening.”
+- ACK → Browser confirms.
+
+✅ Connection established — ready for data exchange.
+
+
+🧱 4. TLS/SSL Handshake (for HTTPS)
+If the site uses HTTPS, the browser and server perform an encryption handshake:
+
+- Browser requests the server’s SSL certificate.
+- Server sends it; browser verifies it’s valid and trusted.
+- Both agree on an encryption method (keys exchanged).
+- A secure tunnel is established — all data is now encrypted.
+
+🔐 This ensures no one can spy or tamper with your communication.
+
+
+📩 5. HTTP Request Sent
+The browser sends an HTTP request like this:
+
+"""
+GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Chrome/141.0
+Accept: text/html
+"""
+
+- GET = request method
+- Host = which server/domain you want
+- Headers = extra context about browser, cookies, etc.
+
+(If it’s a POST request, body data is also sent.)
+
+
+🖥️ 6. Server Processing
+The web server receives the request and decides how to respond:
+
+- If it’s a static site (HTML, CSS, images), it fetches files directly.
+- If it’s dynamic (PHP, Node.js, etc.), the backend executes code:
+    - Queries the database
+    - Processes logic (auth, API calls, etc.)
+    - Generates HTML or JSON
+- The server wraps the response in HTTP headers and sends it back.
+
+"""
+HTTP/1.1 200 OK
+Content-Type: text/html
+"""
+
+📦 7. Browser Receives the Response
+The browser gets the response (HTML, JSON, or binary data).
+
+If it’s HTML:
+
+- Browser parses HTML → builds DOM Tree
+- Downloads linked CSS → builds CSSOM Tree
+- Downloads JS → executes it
+- Combines both into a Render Tree
+
+
+🎨 8. Rendering & Painting
+
+Browser engine (like Blink in Chrome) does:
+
+- Layout → Calculates position of every element.
+- Paint → Converts layout into actual pixels.
+- Compositing → Layers and animations are rendered to the screen.
+
+You see the page visually.
+
+
+♻️ 9. Subsequent Requests
+As browser parses the HTML, it finds more assets:
+
+- CSS files
+- JS scripts
+- Images, fonts, videos
+
+Each triggers new HTTP(S) requests — repeating the same connection cycle (often faster due to caching and persistent TCP).
+
+
+🧠 10. Caching, Cookies & Storage
+
+Before closing the connection, browser stores:
+
+- Cache → static files for reuse
+- Cookies → session/auth tokens
+- LocalStorage/SessionStorage → client-side data
+
+Next time you visit, load time is drastically reduced.
+
+"""
+URL → DNS → TCP → TLS → HTTP Request → Server Logic → HTTP Response
+     → Browser Parsing → Rendering → Caching
+"""
+
+
+⚙️ Developer Mindset Takeaway
+- Frontend devs focus on DOM, CSSOM, JS execution, rendering.
+- Backend devs focus on HTTP request handling, routing, DB queries, APIs.
+- Full stack devs understand how the entire chain fits together.
