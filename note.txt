@@ -1,1 +1,1 @@
-prompt: practical example about "topic name" with explanation
+practical example about "topic name" with explanation
